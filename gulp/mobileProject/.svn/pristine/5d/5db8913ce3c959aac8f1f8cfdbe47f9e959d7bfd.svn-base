@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>halam</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<style>
+		.test_hammer {
+			width: 200px;
+			height: 200px;
+			background: red;
+			margin: 50px;
+			position: relative;
+		}
+	</style>
+</head>
+<body>
+	hammer.js --> 移动端手势库
+	<div id="gyf" class="test_hammer"></div>
+	<div id="gyfsss" class="test_hammer"></div>
+	<script src="js/plugin/hammer.js"></script>
+	<script>
+		//tap --> 移动端点击事件--》解决移动端中点击事件的300ms延迟
+
+		//pan -->
+		//移动端事件中拖动事件
+		var dom = document.getElementById('gyf');
+		var ham = new Hammer(dom);
+		ham.on('tap', function(event){
+			console.log('我被点击了'); 	
+		});
+		ham.on('pan', function(event){
+			dom.style.left = event.deltaX + 'px';
+			dom.style.top = event.deltaY + 'px';
+			console.log('我被拖动了');
+		})
+		/*ham.get('pan').set({direction: Hammer.DIRECTION_VERTICAL});*/
+		ham.on('press', function(event){
+			console.log('我被挤压了'); 	
+		});
+		/*ham.on('swipeleft', function(event){
+			console.log('我被挤压了'); 	
+		});*/
+		ham.on('rotate', function(event){
+			// do something cool
+		   var rotation = Math.round(e.rotation);    
+		   stage.style.transform = 'rotate('+rotation+'deg)';
+		})
+	</script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+window.form_busModule = Object.create(baseModule);
+//每个对象互相独立---》简称继承
+(function(){
+	var selfModule = {
+		el: $('#form_bus'),
+		homeinput: $("input[name=home_addr]"),
+		workinput: $("input[name=work_addr]"),
+		submitdom: $(".collect-submit"),
+		name: '我是表单页',
+		morning: false,
+		evening: false,
+		renderContent: function(){
+			//this.el.html('我是表单页的模块')
+			console.log('我是表单页的模块');
+		},
+		bindEvent: function(){
+			var me = this;
+			$(EventCenter).bind('morning_change', function(){
+				console.log('上班时间发生了改变');
+				me.morning = true;
+				me.checkValidForm();
+			});
+			$(EventCenter).bind('evening_change', function(){
+				console.log('下班时间发生了改变');
+				me.evening = true;
+				me.checkValidForm();
+			});
+			$(EventCenter).trigger('datePicker_Init');
+			this.homeinput.bind("input", function(event){
+				me.checkValidForm();	
+			});
+			this.workinput.bind("input", function(event){
+				me.checkValidForm();	
+			});
+			this.submitdom.bind('click', function(){
+				location.href="#/login";
+			});
+		},
+		checkValidForm: function(){
+			//检查表单内容是否填写完成
+			var flag = false;
+			if(this.homeinput.val() === '') {
+				flag = true;
+			}
+			if(this.workinput.val() === '') {
+				flag = true;
+			}
+			if(!this.morning) {
+				flag = true;
+			}
+			if(!this.evening) {
+				flag = true;
+			}
+
+			if(!flag) {
+				console.log('你通过检验');
+				this.submitdom.addClass('active');
+			}else {
+				console.log('你没有通过检验');
+				this.submitdom.removeClass('active');
+			}
+		}
+	}
+	$.extend(form_busModule, selfModule);
+})();

@@ -1,0 +1,23 @@
+如何快速启动一个本地服务器？
+
+首先需要安装 node.js
+
+在你项目文件夹内 建立一个新的目录——> node_modules
+
+在你项目文件夹内 打开git，在里面输入：
+npm install connect --save
+npm install serve-static --save
+
+下载完成之后 直接 node server.js
+
+在移动端开发中，有很多事件，其中有点击事件，那么
+移动端的点击事件与PC端的点击事件区别是什么呢？
+移动端的点击事件 它有300ms的延迟
+
+为了解决这个问题，引入了第三方插件--》 fastclick.js
+
+在移动端中，新增了一些特殊事件--》专门针对手势移动的操作：
+
+touchstart --> 监听手势触摸开始时的那一瞬间
+touchmove --> 监听手势移动的那一过程
+touchend --> 监听手势结束移动的那一刻

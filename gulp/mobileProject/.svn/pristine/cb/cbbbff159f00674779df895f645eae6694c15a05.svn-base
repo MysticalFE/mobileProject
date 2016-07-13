@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		.box {
+			width: 200px;
+			height: 200px;
+			background: red;
+			position: absolute;
+			color: white;
+		}
+		.hide {
+			display: none;
+		}
+		body .yel {
+			background: green;
+		}
+		body .black {
+			background: black;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div id="home" class="box hide">首页</div>
+		<div id="pot" class="box hide yel">平底锅</div>
+		<div id="egg" class="box hide black">鸡蛋</div>
+		<div id="openegg" class="box hide yel">打鸡蛋</div>
+	</div>
+	<script src="js/zepto.js"></script>
+	<script>
+		var index = 0;
+		/*
+		以下比较基础，不怎么高大上，从思想上来说看不懂
+		$('.box').click(function(){
+			index++;
+			$(".box").eq(index%3).show().siblings().hide();
+		});*/
+		//以下非常高大上：
+		var QueueTask = ['首页', '平底锅', '鸡蛋', '打鸡蛋'];
+		//该任务队列，从左往右依次执行;
+
+		//此处代码只可意会不可言传，简直是艺术
+		QueueTask.current = null;
+		QueueTask.index = -1;
+		QueueTask.next = function(){
+			QueueTask.current && QueueTask.current.leave && QueueTask.current.leave();
+			QueueTask.index++;
+			var key = QueueTask[QueueTask.index];
+			var module = QueueModuleMap[key]; //得到任务队列中对应模块
+			module && module.enter();
+			QueueTask.current = module;
+		}
+
+		var homeObj = {
+			el: $('#home'),
+			enter: function(){
+				this.el.show();
+				//进入该模块后所需要执行的方法
+				this.ready();
+			},
+			leave: function(){
+				this.el.hide();
+				//离开该模块所需要执行的方法
+			},
+			ready: function(){
+				//ready --> 准备
+				//执行模块的一些初始化方法
+				this.bindEvent();
+			},
+			bindEvent: function(){
+				//该模块的一些绑定事件的方法
+				this.el.bind("click", function(event){
+					QueueTask.next();	
+				});
+			}
+		}
+
+		var potObj = Object.create(homeObj);
+		potObj.el = $("#pot");
+
+
+		var eggObj = Object.create(homeObj);
+		eggObj.el = $("#egg");
+
+		var openEgg = Object.create(homeObj);
+		openEgg.el = $("#openegg");
+
+		var QueueModuleMap = {
+			'首页': homeObj,
+			'平底锅': potObj,
+			'鸡蛋': eggObj,
+			'打鸡蛋': openEgg
+		}
+
+		QueueModuleMap[QueueTask[QueueTask.length - 1]].leave = function(){
+				 	console.log('不好意思，到头了');
+		}
+		QueueTask.next();
+	</script>
+</body>
+</html>
